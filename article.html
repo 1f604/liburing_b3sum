@@ -4,13 +4,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Welcome file</title>
+  <title>article.md</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body class="stackedit">
-  <div class="stackedit__html"><p></p>
-<h1 id="summary">Summary</h1>
+  <div class="stackedit__html"><h1 id="summary">Summary</h1>
 <p>I wrote two versions of a program which computes the BLAKE3 hash of a file (<a href="https://github.com/1f604/liburing_b3sum">source code here</a>), a single-threaded version in C and a multi-threaded version in C++, both of which use io_uring. The single-threaded version is around 25% faster than the official Rust b3sum on my system and <strong>is slightly faster than cat to /dev/null</strong> on my system, and is also slightly faster than <strong>fio</strong> on my system, which I used to measure the  sequential read speed of a system (see <strong>Additional Notes</strong> for the parameters that I used passed to <strong>fio</strong> and other details). The single-threaded version is able to hash a 10GiB file in 2.899s, which works out to around 3533MiB/s, <strong>which is roughly the same as the read speed advertised for my NVME drive (“3500MB/s”)</strong>, which leads me to believe that it is the fastest possible file hashing program on my system and cannot be any faster because a file hashing program cannot finish hashing a file before it has finished reading the last block of the file from the disk.  My multi-threaded implementation is around 1% slower than my single-threaded implementation.</p>
 <p>I provide informal proofs  that both versions of my program are correct (i.e. will always return the correct result) and will never get stuck (i.e. will eventually finish). The informal proofs are provided along with an explanation of the code in the <strong>The Code Explained</strong> section of this article.</p>
 <p>My program is <strong>extremely simple, generic</strong>, and <strong>can be easily modified</strong> to do what you want, as long as what you want is to <strong>read from a file a few blocks at a time and process these blocks while waiting for the next blocks to arrive</strong> - I think this is an extremely common use case, so I made sure that it is <strong>trivially easy</strong> to adapt my program for your needs - if you want to do something different with each block of the file, all you need to do is to replace the call to the hashing function with a call to your own data processing function.</p>
@@ -1783,7 +1782,7 @@ blake3_hasher g_hasher2<span class="token punctuation">;</span>
 TEST: (g=0): rw=read, bs=(R) 128KiB-128KiB, (W) 128KiB-128KiB, (T) 128KiB-128KiB, ioengine=io_uring, iodepth=4  
 fio-3.35  
 Starting 1 process  
-
+  
 TEST: (groupid=0, jobs=1): err= 0: pid=3797: Mon Jul 17 19:31:29 2023  
 read: IOPS=27.0k, BW=3380MiB/s (3544MB/s)(1024MiB/303msec)  
 slat (usec): min=2, max=118, avg= 8.32, stdev= 2.03  
@@ -1802,7 +1801,7 @@ submit : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, &gt;=64=0.0%
 complete : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, &gt;=64=0.0%  
 issued rwts: total=8192,0,0,0 short=0,0,0,0 dropped=0,0,0,0  
 latency : target=0, window=0, percentile=100.00%, depth=4  
-
+  
 Run status group 0 (all jobs):  
 READ: bw=3380MiB/s (3544MB/s), 3380MiB/s-3380MiB/s (3544MB/s-3544MB/s), io=1024MiB (1074MB), run=303-303msec  
 </code></pre>
@@ -2430,88 +2429,88 @@ sys	0m0.102s
 </thead>
 <tbody>
 <tr>
-<td>echo 1 &gt; /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=8K</td>
-<td>./example_64K</td>
+<td><code>echo 1 &gt; /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=8K | ./example_64K</code></td>
 <td>0.363s</td>
 <td>0.3725s</td>
+<td>0.381s</td>
 </tr>
 <tr>
-<td>echo 1 &gt; /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=8K</td>
-<td>./example_2M</td>
+<td><code>echo 1 &gt; /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=8K | ./example_2M</code></td>
 <td>0.362s</td>
 <td>0.37s</td>
+<td>0.384s</td>
 </tr>
 <tr>
-<td>echo 1 &gt; /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=16K</td>
-<td>./example_64K</td>
+<td><code>echo 1 &gt; /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=16K | ./example_64K</code></td>
 <td>0.35s</td>
 <td>0.3555s</td>
+<td>0.361s</td>
 </tr>
 <tr>
-<td>echo 1 &gt; /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=16K</td>
-<td>./example_2M</td>
+<td><code>echo 1 &gt; /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=16K | ./example_2M</code></td>
 <td>0.346s</td>
 <td>0.353s</td>
-</tr>
-<tr>
-<td>echo 1 &gt; /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=32K</td>
-<td>./example_64K</td>
-<td>0.333s</td>
-<td>0.341s</td>
-</tr>
-<tr>
-<td>echo 1 &gt; /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=32K</td>
-<td>./example_2M</td>
-<td>0.337s</td>
-<td>0.346s</td>
-</tr>
-<tr>
-<td>echo 1 &gt; /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=64K</td>
-<td>./example_64K</td>
-<td>0.332s</td>
-<td>0.3385s</td>
-</tr>
-<tr>
-<td>echo 1 &gt; /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=64K</td>
-<td>./example_2M</td>
-<td>0.335s</td>
-<td>0.337s</td>
-</tr>
-<tr>
-<td>echo 1 &gt; /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=128K</td>
-<td>./example_64K</td>
-<td>0.351s</td>
-<td>0.3675s</td>
-</tr>
-<tr>
-<td>echo 1 &gt; /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=128K</td>
-<td>./example_2M</td>
-<td>0.344s</td>
 <td>0.357s</td>
 </tr>
 <tr>
-<td>echo 1 &gt; /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=256K</td>
-<td>./example_64K</td>
+<td><code>echo 1 &gt; /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=32K | ./example_64K</code></td>
+<td>0.333s</td>
+<td>0.341s</td>
+<td>0.349s</td>
+</tr>
+<tr>
+<td><code>echo 1 &gt; /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=32K | ./example_2M</code></td>
+<td>0.337s</td>
+<td>0.346s</td>
+<td>0.358s</td>
+</tr>
+<tr>
+<td><code>echo 1 &gt; /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=64K | ./example_64K</code></td>
+<td>0.332s</td>
+<td>0.3385s</td>
+<td>0.342s</td>
+</tr>
+<tr>
+<td><code>echo 1 &gt; /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=64K | ./example_2M</code></td>
+<td>0.335s</td>
+<td>0.337s</td>
+<td>0.345s</td>
+</tr>
+<tr>
+<td><code>echo 1 &gt; /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=128K | ./example_64K</code></td>
+<td>0.351s</td>
+<td>0.3675s</td>
+<td>0.371s</td>
+</tr>
+<tr>
+<td><code>echo 1 &gt; /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=128K | ./example_2M</code></td>
+<td>0.344s</td>
+<td>0.357s</td>
+<td>0.505s</td>
+</tr>
+<tr>
+<td><code>echo 1 &gt; /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=256K | ./example_64K</code></td>
 <td>0.532s</td>
 <td>0.55s</td>
+<td>0.556s</td>
 </tr>
 <tr>
-<td>echo 1 &gt; /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=256K</td>
-<td>./example_2M</td>
+<td><code>echo 1 &gt; /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=256K | ./example_2M</code></td>
 <td>0.53s</td>
 <td>0.547s</td>
+<td>0.723s</td>
 </tr>
 <tr>
-<td>echo 1 &gt; /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=2M</td>
-<td>./example_64K</td>
+<td><code>echo 1 &gt; /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=2M | ./example_64K</code></td>
 <td>0.542s</td>
 <td>0.545s</td>
+<td>0.548s</td>
 </tr>
 <tr>
-<td>echo 1 &gt; /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=2M</td>
-<td>./example_2M</td>
+<td><code>echo 1 &gt; /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=2M | ./example_2M</code></td>
 <td>0.542s</td>
 <td>0.5445s</td>
+<td>0.548s</td>
 </tr>
 </tbody>
 </table><p>The above shows that the optimal bs for dd on my system is 64KiB. To make sure that this wasn’t because the example program was reading 64KiB at a time, I made another version of the example program that read 2M at a time (it’s simple, just change the 65536 in the example.c source code to 2 * 1024 * 1024). Their performance (see table above) was identical across all block sizes, which leads me to think that makes absolutely no difference.</p>
