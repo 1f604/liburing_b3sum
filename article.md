@@ -2406,20 +2406,20 @@ And here are the results from dd on my current machine:
 
 | Command | Min | Median | Max |
 | --- | --- | --- | --- |
-| echo 1 > /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=8K | ./example_64K | 0.363s | 0.3725s | 0.381s |
-| echo 1 > /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=8K | ./example_2M | 0.362s | 0.37s | 0.384s |
-| echo 1 > /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=16K | ./example_64K | 0.35s | 0.3555s | 0.361s |
-| echo 1 > /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=16K | ./example_2M | 0.346s | 0.353s | 0.357s |
-| echo 1 > /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=32K | ./example_64K | 0.333s | 0.341s | 0.349s |
-| echo 1 > /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=32K | ./example_2M | 0.337s | 0.346s | 0.358s |
-| echo 1 > /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=64K | ./example_64K | 0.332s | 0.3385s | 0.342s |
-| echo 1 > /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=64K | ./example_2M | 0.335s | 0.337s | 0.345s |
-| echo 1 > /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=128K | ./example_64K | 0.351s | 0.3675s | 0.371s |
-| echo 1 > /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=128K | ./example_2M | 0.344s | 0.357s | 0.505s |
-| echo 1 > /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=256K | ./example_64K | 0.532s | 0.55s | 0.556s |
-| echo 1 > /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=256K | ./example_2M | 0.53s | 0.547s | 0.723s |
-| echo 1 > /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=2M | ./example_64K | 0.542s | 0.545s | 0.548s |
-| echo 1 > /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=2M | ./example_2M | 0.542s | 0.5445s | 0.548s |
+| `echo 1 > /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=8K | ./example_64K` | 0.363s | 0.3725s | 0.381s |
+| `echo 1 > /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=8K | ./example_2M` | 0.362s | 0.37s | 0.384s |
+| `echo 1 > /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=16K | ./example_64K` | 0.35s | 0.3555s | 0.361s |
+| `echo 1 > /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=16K | ./example_2M` | 0.346s | 0.353s | 0.357s |
+| `echo 1 > /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=32K | ./example_64K` | 0.333s | 0.341s | 0.349s |
+| `echo 1 > /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=32K | ./example_2M` | 0.337s | 0.346s | 0.358s |
+| `echo 1 > /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=64K | ./example_64K` | 0.332s | 0.3385s | 0.342s |
+| `echo 1 > /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=64K | ./example_2M` | 0.335s | 0.337s | 0.345s |
+| `echo 1 > /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=128K | ./example_64K` | 0.351s | 0.3675s | 0.371s |
+| `echo 1 > /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=128K | ./example_2M` | 0.344s | 0.357s | 0.505s |
+| `echo 1 > /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=256K | ./example_64K` | 0.532s | 0.55s | 0.556s |
+| `echo 1 > /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=256K | ./example_2M` | 0.53s | 0.547s | 0.723s |
+| `echo 1 > /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=2M | ./example_64K` | 0.542s | 0.545s | 0.548s |
+| `echo 1 > /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=2M | ./example_2M` | 0.542s | 0.5445s | 0.548s |
 
 The above shows that the optimal bs for dd on my system is 64KiB. To make sure that this wasn't because the example program was reading 64KiB at a time, I made another version of the example program that read 2M at a time (it's simple, just change the 65536 in the example.c source code to 2 * 1024 * 1024). Their performance (see table above) was identical across all block sizes, which leads me to think that makes absolutely no difference.
 
