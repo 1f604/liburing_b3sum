@@ -26,11 +26,11 @@ For these tests, I used the same 1 GiB (or 10 GiB) input file and always flushed
 | `echo 1 > /proc/sys/vm/drop_caches; sleep 1; time b3sum 1GB.txt --num-threads 8` | 0.461s | 0.464s | 0.47s |
 | `echo 1 > /proc/sys/vm/drop_caches; sleep 1; time b3sum 1GB.txt --no-mmap` | 0.381s | 0.386s | 0.394s |
 | `echo 1 > /proc/sys/vm/drop_caches; sleep 1; time ./b3sum_linux 1GB.txt --no-mmap` | 0.379s | 0.39s | 0.404s |
-| `echo 1 > /proc/sys/vm/drop_caches; sleep 1; time cat 1GB.txt | ./example` | 0.364s | 0.3745s | 0.381s |
+| echo 1 > /proc/sys/vm/drop_caches; sleep 1; time cat 1GB.txt &#124; ./example | 0.364s | 0.3745s | 0.381s |
 | `echo 1 > /proc/sys/vm/drop_caches; sleep 1; time cat 1GB.txt > /dev/null` | 0.302s | 0.302s | 0.303s |
-| `echo 1 > /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=64K | ./example` | 0.338s | 0.341s | 0.348s |
+| echo 1 > /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=64K &#124; ./example | 0.338s | 0.341s | 0.348s |
 | `echo 1 > /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=64K of=/dev/null` | 0.303s | 0.306s | 0.308s |
-| `echo 1 > /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=2M | ./example` | 0.538s | 0.5415s | 0.544s |
+| echo 1 > /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=2M &#124; ./example | 0.538s | 0.5415s | 0.544s |
 | `echo 1 > /proc/sys/vm/drop_caches; sleep 1; time dd if=1GB.txt bs=2M of=/dev/null`  | 0.302s | 0.303s | 0.304s |
 | `fio --name TEST --eta-newline=5s --filename=temp.file --rw=read --size=2g --io_size=1g --blocksize=512k --ioengine=io_uring --fsync=10000 --iodepth=2 --direct=1 --numjobs=1 --runtime=60 --group_reporting` | 0.302s | 0.3025s | 0.303s |
 | `echo 1 > /proc/sys/vm/drop_caches; sleep 1; time ./liburing_b3sum_singlethread 1GB.txt 512 2 1 0 2 0 0` | 0.301s | 0.301s | 0.302s |
