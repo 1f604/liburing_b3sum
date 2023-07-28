@@ -65,10 +65,12 @@ You also need to put the header files in the right place.
 
 ## Explanation of my program
 
-For a detailed explanation of my program, see the `article.md` file. 
+For a detailed explanation of my program, see the `article.md` file. If the `article.md` file doesn't display properly (due to Github Markdown formatting) you can try these links:
+- https://1f604.com/liburing_b3sum/article.html
+- https://1f604.blogspot.com/2023/07/fastest-possible-b3sum-using-iouring.html
+- https://www.codeproject.com/Articles/5365529/Fastest-b3sum-using-io-uring-faster-than-cat-to-de
 
-The `article.html` file is just the `article.md` file converted to HTML format.
-
-
+Also trylinks here: 
+- 
 
 
