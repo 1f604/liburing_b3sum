@@ -70,7 +70,5 @@ For a detailed explanation of my program, see the `article.md` file. If the `art
 - https://1f604.blogspot.com/2023/07/fastest-possible-b3sum-using-iouring.html
 - https://www.codeproject.com/Articles/5365529/Fastest-b3sum-using-io-uring-faster-than-cat-to-de
 
-Also trylinks here: 
-- 
 
 
