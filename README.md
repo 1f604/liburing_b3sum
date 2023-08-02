@@ -70,5 +70,7 @@ For a detailed explanation of my program, see the `article.md` file. If the `art
 - https://1f604.blogspot.com/2023/07/fastest-possible-b3sum-using-iouring.html
 - https://www.codeproject.com/Articles/5365529/Fastest-b3sum-using-io-uring-faster-than-cat-to-de
 
+# Potential enhancements
 
-
+* Batch mode for hashing multiple files (might make it faster when hashing multiple files)
+* Switch to cv.wait instead of atomic (might reduce CPU usage)
